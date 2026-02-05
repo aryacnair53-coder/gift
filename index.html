@@ -1,97 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For You ❤️</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For You ❤️</title>
 
-    <style>
-        body {
-            margin: 0;
-            height: 100vh;
-            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            overflow: hidden;
-        }
+<style>
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family:'Segoe UI', Arial, sans-serif;
+    background:linear-gradient(135deg,#ff5f7e,#ff9a9e);
+    overflow:hidden;
+}
 
-        .card {
-            background: white;
-            width: 90%;
-            max-width: 360px;
-            padding: 28px;
-            border-radius: 22px;
-            text-align: center;
-            box-shadow: 0 18px 35px rgba(0,0,0,0.25);
-            position: relative;
-        }
+/* floating hearts */
+.heart{
+    position:absolute;
+    font-size:18px;
+    animation:floatUp 9s linear infinite;
+    opacity:0.7;
+    pointer-events:none;
+}
 
-        h1 {
-            color: #ff4d6d;
-            font-size: 22px;
-            margin-bottom: 15px;
-        }
+/* card */
+.card{
+    background:white;
+    width:90%;
+    max-width:360px;
+    padding:32px;
+    border-radius:26px;
+    text-align:center;
+    box-shadow:0 20px 40px rgba(0,0,0,0.25);
+    animation:fadeIn 1s ease;
+}
 
-        p {
-            color: #555;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
+/* text */
+h1{
+    color:#e63950;
+    font-size:22px;
+    margin-bottom:20px;
+}
 
-        button {
-            width: 100%;
-            padding: 14px;
-            font-size: 18px;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            margin-top: 12px;
-        }
+p{
+    color:#555;
+    font-size:16px;
+    line-height:1.6;
+}
 
-        #yesBtn {
-            background-color: #ff4d6d;
-            color: white;
-        }
+/* buttons */
+.button-row{
+    display:flex;
+    gap:12px;
+    margin-top:16px;
+}
 
-        #noBtn {
-            background-color: #f1f1f1;
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-        }
+button{
+    flex:1;
+    padding:12px 0;
+    font-size:16px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+}
 
-        #message {
-            color: #ff4d6d;
-            font-size: 18px;
-            margin-top: 20px;
-        }
+/* yes / no styles */
+#yesBtn{
+    background:#e63950;
+    color:white;
+}
 
-        .heart {
-            position: absolute;
-            font-size: 18px;
-            animation: float 6s linear infinite;
-            pointer-events: none;
-        }
+#noBtn{
+    background:#f2f2f2;
+    color:#555;
+    opacity:0.75;
+    position:relative;
+}
 
-        .confetti {
-            position: fixed;
-            width: 8px;
-            height: 8px;
-            animation: fall 3s linear forwards;
-        }
+/* second screen hidden */
+#secondScreen{
+    display:none;
+}
 
-        .music {
-            font-size: 12px;
-            color: #777;
-            margin-top: 15px;
-        }
+/* animations */
+@keyframes floatUp{
+    from{transform:translateY(100vh); opacity:0;}
+    to{transform:translateY(-10vh); opacity:1;}
+}
 
-        @keyframes float {
-            from { transform: translateY(100vh); opacity: 1; }
-            to { transform: translateY(-10vh); opacity: 0; }
-        }
+@keyframes fadeIn{
+    from{opacity:0; transform:scale(0.95);}
+    to{opacity:1; transform:scale(1);}
+}
+</style>
+</head>
 
-        @keyframes fall {
-            to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+<body>
+
+<!-- FIRST SCREEN -->
+<div class="card" id="firstScreen">
+    <h1>Just one question 💗</h1>
+    <h1>Do you love me?</h1>
+
+    <div class="button-row">
+        <button id="yesBtn" onclick="showSecond()">Yes 💕</button>
+        <button id="noBtn">No</button>
+    </div>
+</div>
+
+<!-- SECOND SCREEN -->
+<div class="card" id="secondScreen">
+    <h1>Hey… ❤️</h1>
+    <p>
+        That answer means more to me than you know.<br><br>
+        I made this because you make my days lighter,
+        my smiles easier, and my heart calmer.<br><br>
+        No pressure. No expectations.  
+        Just something honest from me 💗
+    </p>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const first = document.getElementById("firstScreen");
+const second = document.getElementById("secondScreen");
+
+/* playful no button movement */
+function moveNo(){
+    const maxX = first.offsetWidth - noBtn.offsetWidth;
+    const maxY = first.offsetHeight - noBtn.offsetHeight;
+    noBtn.style.transform =
+        `translate(${Math.random()*maxX - maxX/2}px,
+                   ${Math.random()*maxY - maxY/2}px)`;
+}
+noBtn.addEventListener("mouseover", moveNo);
+noBtn.addEventListener("touchstart", moveNo);
+
+/* show second screen */
+function showSecond(){
+    first.style.display = "none";
+    second.style.display = "block";
+}
+
+/* floating hearts */
+function createHeart(){
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerText = "❤️";
+    h.style.left = Math.random()*100 + "vw";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),9000);
+}
+setInterval(createHeart, 1400);
+</script>
+
+</body>
+</html>
